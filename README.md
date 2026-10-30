@@ -2,6 +2,8 @@
 
 **A personal shopping & lifestyle assistant.** One search across groceries, food delivery, rides and shopping & lifestyle (tech, fashion, beauty, home). SmartBuy finds the exact item, works out the *real* final price on each platform (delivery fees, platform fees, coupons), shows delivery or pickup times, and hands you off to the app you choose to finish. It never pretends to place an order.
 
+**🔗 Live demo:** _add your Render link here_ (free hosting: the first visit after a quiet period takes ~1 minute to wake up)
+
 ![Home](docs/screenshots/home.png)
 
 > **Honest data:** Platforms connect through **integration adapters** (one per platform). Where no official API or authorised integration is configured, an adapter serves clearly labelled **sample data** (prices, fees and delivery times) or **simulated estimates** (ride fares). No scraping, and no bypassing any platform's terms or security.
@@ -136,6 +138,16 @@ python -m pytest -v
 ```powershell
 docker compose up --build
 ```
+
+## 🌐 Deploy (free) on Render
+
+The repo includes a root `Dockerfile` (builds the React app and serves it from FastAPI, so it's **one service, one URL**) and a `render.yaml` Blueprint that also creates a PostgreSQL database.
+
+1. Push this repo to GitHub.
+2. On [render.com](https://render.com), sign in with GitHub and choose **New → Blueprint**, then pick the repo and click **Apply**.
+3. Wait for the build (~5–10 min). The app goes live at `https://smartbuy-ai.onrender.com` (Render adds a suffix if that name is taken).
+
+Free-tier notes: the app sleeps after 15 minutes without visits (the next visit takes about a minute to wake up), and Render's free PostgreSQL expires after 30 days. For a permanent free database, create one on Neon and set its connection string as `DATABASE_URL` in Render.
 
 ## 🤖 Optional: LLM assistant
 
