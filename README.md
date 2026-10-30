@@ -2,7 +2,7 @@
 
 **A personal shopping & lifestyle assistant.** One search across groceries, food delivery, rides and shopping & lifestyle (tech, fashion, beauty, home). SmartBuy finds the exact item, works out the *real* final price on each platform (delivery fees, platform fees, coupons), shows delivery or pickup times, and hands you off to the app you choose to finish. It never pretends to place an order.
 
-**🔗 Live demo:** _add your Render link here_ (free hosting: the first visit after a quiet period takes ~1 minute to wake up)
+**🔗 Live demo:** https://smartbuy-ai-gvgy.onrender.com
 
 ![Home](docs/screenshots/home.png)
 
