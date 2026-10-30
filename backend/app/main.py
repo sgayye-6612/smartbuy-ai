@@ -1,9 +1,12 @@
 """SmartBuy AI API entry point.  Run:  python -m uvicorn app.main:app --reload"""
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import inspect, text
 from sqlalchemy.orm import Session
 
@@ -76,3 +79,22 @@ for r in (auth, addresses, platforms, products, rides, basket, assistant, wishli
 def health(db: Session = Depends(get_db)):
     db.execute(text("SELECT 1"))
     return {"status": "ok", "database": "connected", "engine": engine.dialect.name}
+
+
+# ---------- Production: serve the built React app from the same server ----------
+# The Dockerfile copies the frontend build into backend/static. Locally (npm run dev) this folder
+# doesn't exist and the frontend runs separately on port 5173.
+STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
+
+if (STATIC_DIR / "index.html").is_file():
+    if (STATIC_DIR / "assets").is_dir():
+        app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def frontend(path: str):
+        if path.startswith("api/"):
+            raise HTTPException(404, "Not found")
+        file = (STATIC_DIR / path).resolve()
+        if path and file.is_file() and STATIC_DIR.resolve() in file.parents:
+            return FileResponse(file)
+        return FileResponse(STATIC_DIR / "index.html")  # React Router handles the page

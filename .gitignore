@@ -13,6 +13,9 @@ __pycache__/
 node_modules/
 dist/
 
+# Built frontend copied into the backend (production only)
+backend/static/
+
 # OS / editors
 .DS_Store
 Thumbs.db
