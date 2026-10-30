@@ -1,0 +1,23 @@
+# Render Blueprint: creates the app + a free PostgreSQL database in one click.
+# Render dashboard -> New -> Blueprint -> pick this GitHub repo -> Apply.
+services:
+  - type: web
+    name: smartbuy-ai
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: smartbuy-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      # Optional: paste a Claude API key in the Render dashboard to enable the LLM assistant
+      - key: ANTHROPIC_API_KEY
+        sync: false
+
+databases:
+  - name: smartbuy-db
+    plan: free
